@@ -1,34 +1,41 @@
 CC = g++
-INCLUDE_DIR := $(MNIST_ML_ROOT)/include
-SRC := $(MNIST_ML_ROOT)/src
-CFLAGS := -std=c++11 -g
-LIB_DATA := libdata.so
+CFLAGS = -std=c++11 -g -fPIC
+INCLUDE_DIR = $(MNIST_ML_ROOT)/include
+SRC_DIR = $(MNIST_ML_ROOT)/src
+OBJ_DIR = $(MNIST_ML_ROOT)/obj
+LIB_DIR = $(MNIST_ML_ROOT)/lib
+BIN_DIR = $(MNIST_ML_ROOT)/bin
+LIB_DATA = libdata.so
 
-all: $(LIB_DATA) main
+# Automatically find all .cc source files and corresponding object files
+SOURCES := $(wildcard $(SRC_DIR)/*.cc)
+OBJECTS := $(patsubst $(SRC_DIR)/%.cc, $(OBJ_DIR)/%.o, $(SOURCES))
 
-$(LIB_DATA): libdir objdir obj/data_handler.o obj/data.o
-	$(CC) $(CFLAGS) -shared -o $(MNIST_ML_ROOT)/lib/$(LIB_DATA) obj/*.o
-	rm -r $(MNIST_ML_ROOT)/obj
+.PHONY: all clean libdir objdir bindir
 
+all: $(LIB_DIR)/$(LIB_DATA) $(BIN_DIR)/main
+
+# Rule to build the shared library
+$(LIB_DIR)/$(LIB_DATA): libdir objdir $(OBJECTS)
+	$(CC) $(CFLAGS) -shared -o $@ $(OBJECTS)
+
+# Rule to build the main executable
+$(BIN_DIR)/main: bindir $(MNIST_ML_ROOT)/main.cc $(LIB_DIR)/$(LIB_DATA)
+	$(CC) $(CFLAGS) -o $@ $(MNIST_ML_ROOT)/main.cc -I$(INCLUDE_DIR) -L$(LIB_DIR) -ldata
+
+# Generic rule for compiling object files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cc
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
+
+# Directory creation rules
 libdir:
-	mkdir -p $(MNIST_ML_ROOT)/lib
+	mkdir -p $(LIB_DIR)
 
 objdir:
-	mkdir -p $(MNIST_ML_ROOT)/obj
+	mkdir -p $(OBJ_DIR)
 
 bindir:
-	mkdir -p $(MNIST_ML_ROOT)/bin
-
-obj/data_handler.o: $(SRC)/data_handler.cc
-	$(CC) -fPIC $(CFLAGS) -o obj/data_handler.o -I$(INCLUDE_DIR) -c $(SRC)/data_handler.cc
-
-obj/data.o: $(SRC)/data.cc
-	$(CC) -fPIC $(CFLAGS) -o obj/data.o -I$(INCLUDE_DIR) -c $(SRC)/data.cc
-
-main: bindir $(MNIST_ML_ROOT)/main.cc $(LIB_DATA)
-	$(CC) -fPIC $(CFLAGS) -o $(MNIST_ML_ROOT)/main $(MNIST_ML_ROOT)/main.cc -I$(INCLUDE_DIR) -L$(MNIST_ML_ROOT)/lib -ldata
+	mkdir -p $(BIN_DIR)
 
 clean:
-	rm -r $(MNIST_ML_ROOT)/lib
-	rm -r $(MNIST_ML_ROOT)/obj
-	rm -f $(MNIST_ML_ROOT)/main
+	rm -rf $(LIB_DIR) $(OBJ_DIR) $(BIN_DIR)
