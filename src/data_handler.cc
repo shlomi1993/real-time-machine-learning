@@ -80,9 +80,9 @@ void DataHandler::split_data() {
     std::mt19937 rng(std::random_device{}());
 
     auto size = m_data_array.size();
-    int train_size = static_cast<int>(size * TRAIN_SET_PERCENT);
-    int test_size = static_cast<int>(size * TEST_SET_PERCENT);
-    int validation_size = static_cast<int>(size * VALIDATION_SET_PERCENT);
+    int train_size = static_cast<int>(size * M_TRAIN_SET_PERCENT);
+    int test_size = static_cast<int>(size * M_TEST_SET_PERCENT);
+    int validation_size = static_cast<int>(size * M_VALIDATION_SET_PERCENT);
 
     // Use the standalone helper function to select data
     select_random_data(m_data_array, m_training_data, train_size, used_indexes, rng);
@@ -97,8 +97,8 @@ void DataHandler::split_data() {
 void DataHandler::count_classes() {
     int count = 0;
     for (auto& data : m_data_array) {
-        if (class_map.find(data.get_label()) == class_map.end()) {
-            class_map[data.get_label()] = count;
+        if (m_class_map.find(data.get_label()) == m_class_map.end()) {
+            m_class_map[data.get_label()] = count;
             data.set_enumerated_label(count);
             ++count;
         }

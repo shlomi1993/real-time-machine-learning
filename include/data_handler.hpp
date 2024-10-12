@@ -18,11 +18,11 @@ class DataHandler {
 
     int m_n_classes = 0;
     int m_feature_vector_size = 0;
-    std::map<uint8_t, int> class_map;
+    std::map<uint8_t, int> m_class_map;
 
-    const double TRAIN_SET_PERCENT = 0.75;
-    const double TEST_SET_PERCENT = 0.20;
-    const double VALIDATION_SET_PERCENT = 0.05;
+    const double M_TRAIN_SET_PERCENT = 0.75;
+    const double M_TEST_SET_PERCENT = 0.20;
+    const double M_VALIDATION_SET_PERCENT = 0.05;
 
 public:
     DataHandler() = default;
