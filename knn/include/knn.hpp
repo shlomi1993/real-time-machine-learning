@@ -1,5 +1,4 @@
-#ifndef __KNN_H
-#define __KNN_H
+#pragma once
 
 #include <vector>
 #include "data.hpp"
@@ -27,5 +26,3 @@ public:
     double validate_performance();
     double test_performance();
 };
-
-#endif // __KNN_H
