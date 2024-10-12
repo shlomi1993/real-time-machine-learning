@@ -1,12 +1,12 @@
-#ifndef __DATA_HANDLER_H
-#define __DATA_HANDLER_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include <fstream>
 #include <map>
 #include <unordered_set>
-#include "stdint.h"
+#include <memory>
+#include <cstdint>
 #include "data.hpp"
 
 class DataHandler {
@@ -15,20 +15,19 @@ class DataHandler {
     std::vector<Data *> *m_test_data;
     std::vector<Data *> *m_validation_data;
 
-    int m_n_classes;
-    int m_feature_vector_size;
+    int m_n_classes = 0;
+    uint8_t m_feature_vector_size = 0;
     std::map<uint8_t, int> class_map;
 
-    const double TRAIN_SET_PERCENT = 0.75;
-    const double TEST_SET_PERCENT = 0.20;
-    const double VALIDATION_SET_PERCENT = 0.05;
+    const double M_TRAIN_SET_PERCENT = 0.75;
+    const double M_TEST_SET_PERCENT = 0.20;
+    const double M_VALIDATION_SET_PERCENT = 0.05;
 
   public:
-    DataHandler();
-    ~DataHandler() {}
-
-    void read_feature_vector(std::string path);
-    void read_feature_labels(std::string path);
+    DataHandler() noexcept;
+    ~DataHandler();
+    void read_feature_vector(const std::string& path);
+    void read_feature_labels(const std::string& path);
     void split_data();
     void count_classes();
 
@@ -37,7 +36,4 @@ class DataHandler {
     std::vector<Data *> *get_training_data();
     std::vector<Data *> *get_test_data();
     std::vector<Data *> *get_validation_data();
-
 };
-
-#endif
