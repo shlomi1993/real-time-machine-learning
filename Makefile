@@ -4,7 +4,7 @@ SRC := $(MNIST_ML_ROOT)/src
 CFLAGS := -std=c++11 -g
 LIB_DATA := libdata.so
 
-all: $(LIB_DATA) main.out
+all: $(LIB_DATA) main
 
 $(LIB_DATA): libdir objdir obj/data_handler.o obj/data.o
 	$(CC) $(CFLAGS) -shared -o $(MNIST_ML_ROOT)/lib/$(LIB_DATA) obj/*.o
@@ -26,9 +26,9 @@ obj/data.o: $(SRC)/data.cc
 	$(CC) -fPIC $(CFLAGS) -o obj/data.o -I$(INCLUDE_DIR) -c $(SRC)/data.cc
 
 main: bindir $(MNIST_ML_ROOT)/main.cc $(LIB_DATA)
-	$(CC) -fPIC $(CFLAGS) -o $(MNIST_ML_ROOT)/main.out $(MNIST_ML_ROOT)/main.cc -I$(INCLUDE_DIR) -L$(MNIST_ML_ROOT)/lib -ldata
+	$(CC) -fPIC $(CFLAGS) -o $(MNIST_ML_ROOT)/main $(MNIST_ML_ROOT)/main.cc -I$(INCLUDE_DIR) -L$(MNIST_ML_ROOT)/lib -ldata
 
 clean:
 	rm -r $(MNIST_ML_ROOT)/lib
 	rm -r $(MNIST_ML_ROOT)/obj
-	rm -f $(MNIST_ML_ROOT)/main.out
+	rm -f $(MNIST_ML_ROOT)/main
