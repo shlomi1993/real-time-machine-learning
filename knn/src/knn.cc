@@ -15,24 +15,31 @@ void Knn::set_test_data(std::vector<Data *> *vec) { m_test_data = vec; }
 void Knn::set_validation_data(std::vector<Data *> *vec) { m_validation_data = vec; }
 
 void Knn::set_k(int k) {
+    if (k <= 0) {
+        std::cerr << "Error: k must be positive." << std::endl;
+        exit(1);
+    }
+
     std::cout << "Set K to " << k << "." << std::endl;
     m_k = k;
 }
 
 double Knn::calculate_distance(Data *query_point, Data *input) {
-    double distance = 0.0;
     if (query_point->get_feature_vector_size() != input->get_feature_vector_size()) {
         std::cerr << "Feature vectors of different sizes." << std::endl;
         exit(1);
     }
+    double distance = 0.0;
 #ifdef EUCLID
     for (unsigned i = 0; i < query_point->get_feature_vector_size(); ++i) {
-        auto diff = query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i);
-        distance += pow(diff, 2);
+        double diff = query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i);
+        distance += diff * diff;
     }
     distance = sqrt(distance);
 #elif defined MANHATTAN
-    // IMPLEMENT MANHATTAN DISTANCE
+    for (unsigned i = 0; i < query_point->get_feature_vector_size(); ++i) {
+        distance += std::abs(query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i));
+    }
 #endif
     return distance;
 }
@@ -73,58 +80,50 @@ void Knn::find_k_nearest(Data *query_point) {
 
 int Knn::predict() {
     std::map<uint8_t, int> class_freq;
-    for (int i = 0; i < m_neighbors->size(); ++i) {
-        auto label = m_neighbors->at(i)->get_label();
-        if (class_freq.find(label) == class_freq.end()) {
-            class_freq[label] = 1;
-        } else {
-            class_freq[label]++;
+    for (Data *neighbor : *m_neighbors) {
+        class_freq[neighbor->get_label()]++;
+    }
+
+    uint8_t best_label = 0;
+    int max_count = 0;
+    for (const auto &kv : class_freq) {
+        if (kv.second > max_count) {
+            best_label = kv.first;
+            max_count = kv.second;
         }
     }
 
-    int best = 0;
-    int max = 0;
-    for (auto kv : class_freq) {
-        if (kv.second > max) {
-            best = kv.first;
-            max = kv.second;
-        }
-    }
-    m_neighbors->clear();
-    return best;
+    return best_label;
 }
 
-double Knn::validate_performance() {
+// Standalone function to evaluate performance
+double evaluate_performance(Knn &knn, std::vector<Data *> *data_set, const std::string &set_name) {
     int count = 0;
     int data_index = 0;
-    for (Data *query_point: *m_validation_data) {
-        find_k_nearest(query_point);
-        int predicted_label = predict();
+    double performance;
+
+    for (Data *query_point : *data_set) {
+        knn.find_k_nearest(query_point);
+        int predicted_label = knn.predict();
         if (predicted_label == query_point->get_label()) {
             ++count;
         }
         ++data_index;
-        std::cout << "Current performance is " << ((double) count * 100.0) / ((double) data_index) << "%" << std::endl;
+        performance = (static_cast<double>(count) * 100.0) / static_cast<double>(data_index);
+        std::cout << "Current " << set_name << " performance: " << performance << "%" << std::endl;
     }
-    auto validation_performance = ((double) count * 100.0) / ((double) m_validation_data->size());
-    std::cout << "Validation performance is " << validation_performance << "%" << std::endl;
-    return validation_performance;
 
+    performance = (static_cast<double>(count) * 100.0) / static_cast<double>(data_set->size());
+    std::cout << "Final " << set_name << " performance: " << performance << "%" << std::endl;
+    return performance;
+}
+
+double Knn::validate_performance() {
+    return evaluate_performance(*this, m_validation_data, "validation");
 }
 
 double Knn::test_performance() {
-    int count = 0;
-    for (Data *query_point: *m_test_data) {
-        find_k_nearest(query_point);
-        int predicted_label = predict();
-        if (predicted_label == query_point->get_label()) {
-            ++count;
-        }
-    }
-    auto test_performance = ((double) count * 100.0) / ((double) m_test_data->size());
-    std::cout << "Test performance is " << test_performance << "%" << std::endl;
-    return test_performance;
-
+    return evaluate_performance(*this, m_test_data, "test");
 }
 
 // Unittest - KNN
