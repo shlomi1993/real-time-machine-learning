@@ -126,14 +126,18 @@ uint32_t DataHandler::convert_to_little_endian(const unsigned char *bytes) {
     return (uint32_t) ((bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | (bytes[3] << 0));
 }
 
+int DataHandler::get_class_counts() {
+    return m_n_classes;
+}
+
 std::vector<Data *> *DataHandler::get_training_data() {
     return m_training_data;
 }
 
-std::vector<Data *> *DataHandler::get_test_data() {
-    return m_test_data;
-}
-
 std::vector<Data *> *DataHandler::get_validation_data() {
     return m_validation_data;
+}
+
+std::vector<Data *> *DataHandler::get_test_data() {
+    return m_test_data;
 }

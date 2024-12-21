@@ -12,16 +12,16 @@
 class DataHandler {
     std::vector<Data *> *m_data_array; // All of the Data pre-split
     std::vector<Data *> *m_training_data;
-    std::vector<Data *> *m_test_data;
     std::vector<Data *> *m_validation_data;
+    std::vector<Data *> *m_test_data;
 
     int m_n_classes = 0;
     uint8_t m_feature_vector_size = 0;
     std::map<uint8_t, int> class_map;
 
     const double M_TRAIN_SET_PERCENT = 0.75;
-    const double M_TEST_SET_PERCENT = 0.20;
     const double M_VALIDATION_SET_PERCENT = 0.05;
+    const double M_TEST_SET_PERCENT = 0.20;
 
   public:
     DataHandler() noexcept;
@@ -33,7 +33,8 @@ class DataHandler {
 
     uint32_t convert_to_little_endian(const unsigned char *bytes);
 
+    int get_class_counts();
     std::vector<Data *> *get_training_data();
-    std::vector<Data *> *get_test_data();
     std::vector<Data *> *get_validation_data();
+    std::vector<Data *> *get_test_data();
 };

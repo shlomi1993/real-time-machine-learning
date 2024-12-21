@@ -8,12 +8,6 @@
 
 Knn::Knn(int k) { set_k(k); }
 
-void Knn::set_training_data(std::vector<Data *> *vec) { m_training_data = vec; }
-
-void Knn::set_test_data(std::vector<Data *> *vec) { m_test_data = vec; }
-
-void Knn::set_validation_data(std::vector<Data *> *vec) { m_validation_data = vec; }
-
 void Knn::set_k(int k) {
     if (k <= 0) {
         std::cerr << "Error: k must be positive." << std::endl;
