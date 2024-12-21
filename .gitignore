@@ -6,6 +6,9 @@
 *.lo
 *.o
 *.obj
+.bin
+.lib
+.obj
 
 # Precompiled Headers
 *.gch
@@ -42,4 +45,5 @@ train-labels-idx1-ubyte
 .DS_Store
 
 # Editor
+.dist
 .vscode

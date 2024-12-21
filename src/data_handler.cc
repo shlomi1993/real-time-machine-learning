@@ -15,6 +15,35 @@ DataHandler::~DataHandler() {
     delete m_validation_data;
 }
 
+void DataHandler::read_csv(std::string path, std::string delim) {
+    m_n_classes = 0;
+    std::ifstream data_file(path.c_str());
+    std::string line; // Holds each line
+    while (std::getline(data_file, line)) {
+        if (line.length() == 0) {
+            continue;
+        }
+        Data *d = new Data();
+        d->set_double_feature_vector(new std::vector<double>());
+        size_t pos = 0;
+        std::string token; // Value in between delimiter
+        while ((pos = line.find(delim)) != std::string::npos) {
+            token = line.substr(0, pos);
+            d->append_to_double_feature_vector(std::stod(token));
+            line.erase(0, pos + delim.length());
+        }
+        if (str_class_map.find(line) != str_class_map.end()) {
+            d->set_label(str_class_map[line]);
+        } else {
+            str_class_map[line] = m_n_classes;
+            d->set_label(str_class_map[line]);
+            m_n_classes++;
+        }
+        m_data_array->push_back(d);
+        m_feature_vector_size = m_data_array->at(0)->get_double_feature_vector()->size();
+    }
+}
+
 void DataHandler::read_feature_vector(const std::string& path) {
     uint32_t header[4]; // MAGIC | N_IMAGES | ROW_SIZE | COL_SIZE
     unsigned char bytes[4];
