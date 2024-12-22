@@ -3,8 +3,8 @@
 #include "common.hpp"
 
 class Knn : public CommonData {
-    int m_k;
-    std::vector<Data *> *m_neighbors;
+    int k;
+    std::vector<Data *> *neighbors;
 
 public:
     Knn(int k);
