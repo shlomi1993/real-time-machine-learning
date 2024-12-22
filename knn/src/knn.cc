@@ -15,7 +15,7 @@ void Knn::set_k(int k) {
     }
 
     std::cout << "Set K to " << k << "." << std::endl;
-    m_k = k;
+    this->k = k;
 }
 
 double Knn::calculate_distance(Data *query_point, Data *input) {
@@ -39,34 +39,34 @@ double Knn::calculate_distance(Data *query_point, Data *input) {
 }
 
 void Knn::find_k_nearest(Data *query_point) {
-    m_neighbors = new std::vector<Data *>;
+    this->neighbors = new std::vector<Data *>;
     double min = std::numeric_limits<double>::max();
     double previous_min = min;
     int index = 0;
 
     // First pass (i = 0) - calculate distances
-    for (int j = 0; j < m_training_data->size(); ++j) {
-        double distance = calculate_distance(query_point, m_training_data->at(j));
-        m_training_data->at(j)->set_distance(distance);
+    for (int j = 0; j < this->training_data->size(); ++j) {
+        double distance = this->calculate_distance(query_point, this->training_data->at(j));
+        this->training_data->at(j)->set_distance(distance);
         if (distance < min) {
             min = distance;
             index = j;
         }
     }
-    m_neighbors->push_back(m_training_data->at(index));
+    this->neighbors->push_back(this->training_data->at(index));
     previous_min = min;
     min = std::numeric_limits<double>::max();
 
     // Remaining passes (i > 0)
-    for (int i = 1; i < m_k; ++i) {
-        for (int j = 0; j < m_training_data->size(); ++j) {
-            double distance = m_training_data->at(j)->get_distance();
+    for (int i = 1; i < k; ++i) {
+        for (int j = 0; j < this->training_data->size(); ++j) {
+            double distance = this->training_data->at(j)->get_distance();
             if (distance > previous_min && distance < min) {
                 min = distance;
                 index = j;
             }
         }
-        m_neighbors->push_back(m_training_data->at(index));
+        this->neighbors->push_back(this->training_data->at(index));
         previous_min = min;
         min = std::numeric_limits<double>::max();
     }
@@ -74,7 +74,7 @@ void Knn::find_k_nearest(Data *query_point) {
 
 int Knn::predict() {
     std::map<uint8_t, int> class_freq;
-    for (Data *neighbor : *m_neighbors) {
+    for (Data *neighbor : *this->neighbors) {
         class_freq[neighbor->get_label()]++;
     }
 
@@ -113,11 +113,11 @@ double evaluate_performance(Knn &knn, std::vector<Data *> *data_set, const std::
 }
 
 double Knn::validate_performance() {
-    return evaluate_performance(*this, m_validation_data, "validation");
+    return evaluate_performance(*this, this->validation_data, "validation");
 }
 
 double Knn::test_performance() {
-    return evaluate_performance(*this, m_test_data, "test");
+    return evaluate_performance(*this, this->test_data, "test");
 }
 
 // Unittest - KNN

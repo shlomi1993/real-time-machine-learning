@@ -1,29 +1,29 @@
 #include "kmeans.hpp"
 
 KMeans::KMeans(int k) {
-    m_n_clusters = k;
-    m_clusters = new std::vector<Cluster *>();
-    m_used_indexes = new std::unordered_set<int>();
+    this->n_clusters = k;
+    this->clusters = new std::vector<Cluster *>();
+    this->used_indexes = new std::unordered_set<int>();
 }
 
 void KMeans::init_clusters() {
-    for (int i = 0; i < m_n_clusters; ++i) {
-        int index = rand() % m_training_data->size();
-        while (m_used_indexes->find(index) != m_used_indexes->end()) {
-            index = rand() % m_training_data->size();
+    for (int i = 0; i < this->n_clusters; ++i) {
+        int index = rand() % this->training_data->size();
+        while (this->used_indexes->find(index) != this->used_indexes->end()) {
+            index = rand() % this->training_data->size();
         }
-        m_clusters->push_back(new Cluster(m_training_data->at(index)));
-        m_used_indexes->insert(index);
+        this->clusters->push_back(new Cluster(this->training_data->at(index)));
+        this->used_indexes->insert(index);
     }
 }
 
 void KMeans::init_clusters_for_each_class() {
     std::unordered_set<int> classes_used;
-    for (int i = 0; i < m_training_data->size(); ++i) {
-        if (classes_used.find(m_training_data->at(i)->get_label()) == classes_used.end()) {
-            m_clusters->push_back(new Cluster(m_training_data->at(i)));
-            classes_used.insert(m_training_data->at(i)->get_label());
-            m_used_indexes->insert(i);
+    for (int i = 0; i < this->training_data->size(); ++i) {
+        if (classes_used.find(this->training_data->at(i)->get_label()) == classes_used.end()) {
+            this->clusters->push_back(new Cluster(this->training_data->at(i)));
+            classes_used.insert(this->training_data->at(i)->get_label());
+            this->used_indexes->insert(i);
         }
     }
 }
@@ -41,60 +41,61 @@ double KMeans::euclidean_distance(std::vector<double> *centroids, Data *point) {
 void KMeans::train() {
     int index;
     do {
-        index = rand() % m_training_data->size();
-    } while (m_used_indexes->find(index) != m_used_indexes->end());
+        index = rand() % this->training_data->size();
+    } while (this->used_indexes->find(index) != this->used_indexes->end());
     double min_dist = std::numeric_limits<double>::max();
     int best_cluster = 0;
-    for (int i = 0; i < m_clusters->size(); ++i) {
-        double current_dist = euclidean_distance(m_clusters->at(i)->m_centroid, m_training_data->at(index));
+    for (int i = 0; i < this->clusters->size(); ++i) {
+        double current_dist = euclidean_distance(this->clusters->at(i)->centroid, this->training_data->at(index));
         if (current_dist < min_dist) {
             min_dist = current_dist;
         }
     }
-    m_clusters->at(best_cluster)->add_to_cluster(m_training_data->at(index));
-    m_used_indexes->insert(index);
+    this->clusters->at(best_cluster)->add_to_cluster(this->training_data->at(index));
+    this->used_indexes->insert(index);
 }
 
 double KMeans::validate() {
     double num_correct = 0.0;
-    for (auto query_point: *m_validation_data) {
+    for (auto query_point: *this->validation_data) {
         double min_dist = std::numeric_limits<double>::max();
         int best_cluster = 0;
-        for (int i = 0; i < m_clusters->size(); ++i) {
-            double current_dist = euclidean_distance(m_clusters->at(i)->m_centroid, query_point);
+        for (int i = 0; i < this->clusters->size(); ++i) {
+            double current_dist = euclidean_distance(this->clusters->at(i)->centroid, query_point);
             if (current_dist < min_dist) {
                 min_dist = current_dist;
                 best_cluster = i;
             }
         }
-        if (m_clusters->at(best_cluster)->m_most_frequent_class == query_point->get_label()) {
+        if (this->clusters->at(best_cluster)->most_frequent_class == query_point->get_label()) {
             ++num_correct;
         }
     }
-    double accuracy = 100.0 * (num_correct / (double)m_validation_data->size());
+    double accuracy = 100.0 * (num_correct / (double) this->validation_data->size());
     return accuracy;
 }
 
 double KMeans::test() {
     double num_correct = 0.0;
-    for (auto query_point: *m_test_data) {
+    for (auto query_point: *this->test_data) {
         double min_dist = std::numeric_limits<double>::max();
         int best_cluster = 0;
-        for (int i = 0; i < m_clusters->size(); ++i) {
-            double current_dist = euclidean_distance(m_clusters->at(i)->m_centroid, query_point);
+        for (int i = 0; i < this->clusters->size(); ++i) {
+            double current_dist = euclidean_distance(this->clusters->at(i)->centroid, query_point);
             if (current_dist < min_dist) {
                 min_dist = current_dist;
                 best_cluster = i;
             }
         }
-        if (m_clusters->at(best_cluster)->m_most_frequent_class == query_point->get_label()) {
+        if (this->clusters->at(best_cluster)->most_frequent_class == query_point->get_label()) {
             ++num_correct;
         }
     }
-    double accuracy = 100.0 * (num_correct / (double)m_test_data->size());
+    double accuracy = 100.0 * (num_correct / (double) this->test_data->size());
     return accuracy;
 }
 
+// Unittest - KMeans
 int main() {
     DataHandler *dh = new DataHandler();
     dh->read_feature_vector("../dataset/train-images-idx3-ubyte");
