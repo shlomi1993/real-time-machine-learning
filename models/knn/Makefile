@@ -1,12 +1,51 @@
-CC=g++
-SRC := $(MNIST_ML_ROOT)/knn/src
-CFLAGS := -std=c++11 -DEUCLID
-INCLUDE_DIR := $(MNIST_ML_ROOT)/knn/include
+# Compiler and flags
+CXX := clang++
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include
 
-all: main
+# Directories
+SRC_DIR := src
+COMMON_DIR := ../../common
+BIN_DIR := bin
 
-main: $(SRC)/knn.cc
-	$(CC) $(CFLAGS) $(SRC)/knn.cc -o main -L$(MNIST_ML_ROOT)/lib -I$(INCLUDE_DIR) -I$(MNIST_ML_ROOT)/include -ldata
+# Source files for this project and common
+SRCS := $(SRC_DIR)/knn.cpp \
+        $(COMMON_DIR)/src/data_handler.cpp \
+        $(COMMON_DIR)/src/data_point.cpp \
+        $(COMMON_DIR)/src/data_set.cpp
 
+# Test source file
+TEST_SRC := knn_test.cpp
+
+# Object files
+OBJS := $(SRCS:.cpp=.o)
+TEST_OBJ := $(TEST_SRC:.cpp=.o)
+
+# Target executable
+TARGET := $(BIN_DIR)/knn_test
+
+# Default target
+all: $(TARGET)
+
+# Ensure bin directory exists
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
+# Link object files into the final binary
+$(TARGET): $(OBJS) $(TEST_OBJ) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Compile test file
+$(TEST_OBJ): $(TEST_SRC)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Compile project and common source files
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Clean object files and binary
 clean:
-	rm main
+	rm -f $(SRC_DIR)/*.o $(COMMON_DIR)/src/*.o *.o $(TARGET)
+
+# Run the executable
+run: all
+	./$(TARGET)
