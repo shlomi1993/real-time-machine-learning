@@ -10,7 +10,7 @@ OBJ_DIR = obj
 # Files
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
 OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
-TARGET = $(BIN_DIR)/etl_test
+TARGET = $(BIN_DIR)/etl_test.out
 TEST_SRC = etl_test.cpp
 
 # Default target

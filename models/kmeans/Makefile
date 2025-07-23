@@ -14,7 +14,7 @@ SRCS := $(SRC_DIR)/kmeans.cpp $(SRC_DIR)/cluster.cpp \
         $(COMMON_DIR)/src/data_set.cpp
 
 OBJS := $(SRCS:.cpp=.o)
-TARGET := $(BIN_DIR)/kmeans_test
+TARGET := $(BIN_DIR)/kmeans_test.out
 
 # Default target
 all: $(TARGET)

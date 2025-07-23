@@ -21,7 +21,7 @@ OBJS := $(SRCS:.cpp=.o)
 TEST_OBJ := $(TEST_SRC:.cpp=.o)
 
 # Target executable
-TARGET := $(BIN_DIR)/knn_test
+TARGET := $(BIN_DIR)/knn_test.out
 
 # Default target
 all: $(TARGET)
