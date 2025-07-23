@@ -1,4 +1,4 @@
-#include "../include/data_set.hpp"
+#include "data_set.hpp"
 
 void DataSet::set_training_data(std::vector<DataPoint *> *training_set) {
     this->training_set = training_set;

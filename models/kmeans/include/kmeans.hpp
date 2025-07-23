@@ -1,32 +1,29 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 #include <unordered_set>
-#include <map>
-#include "../include/common.hpp"
-#include "../include/data_handler.hpp"
+#include "data_set.hpp"
 #include "cluster.hpp"
 
 /**
  * @brief Implements the K-Means clustering algorithm for unsupervised learning.
  */
-class KMeans : public CommonData {
+class KMeans : public DataSet {
 private:
     /**
      * @brief Number of clusters to form.
      */
-    int m_clusters;
+    int num_clusters;
 
     /**
-     * @brief Pointer to the input dataset to be clustered.
+     * @brief Pointer to the clusters (cluster_t structs).
      */
-    std::vector<Data*>* m_data = nullptr;
+    std::vector<cluster_t *> *clusters;
 
     /**
-     * @brief List of centroids, one for each cluster.
+     * @brief Set of indexes used to avoid duplicate initial clusters.
      */
-    std::vector<Data*> m_centroids;
+    std::unordered_set<int> *used_indexes;
 
     /**
      * @brief Calculates Euclidean distance between a centroid and a data point.
@@ -34,14 +31,14 @@ private:
      * @param point Pointer to the data point.
      * @return The Euclidean distance.
      */
-    double euclidean_distance(const std::vector<double>& centroid, Data* point) const;
+    double euclidean_distance(const std::vector<double> &centroid, DataPoint *point) const;
 
     /**
      * @brief Predicts the cluster index for a given data point.
      * @param point Pointer to the data point.
      * @return Cluster index.
      */
-    int predict(Data* point) const;
+    int predict(DataPoint *point) const;
 
 public:
     /**
@@ -51,15 +48,20 @@ public:
     explicit KMeans(int k);
 
     /**
-     * @brief Sets the dataset to be used for clustering.
-     * @param input_data Pointer to the vector of data points.
-     */
-    void set_data(std::vector<Data*>* input_data);
-
-    /**
      * @brief Initializes centroids by randomly selecting points from the dataset.
      */
     void init_clusters();
+
+    /**
+     * @brief Initializes clusters so that each unique class in training data gets one cluster.
+     */
+    void init_clusters_for_each_class();
+
+    /**
+     * @brief Returns the pointer to clusters.
+     * @return Pointer to vector of cluster_t pointers.
+     */
+    std::vector<cluster_t *> *get_clusters() const;
 
     /**
      * @brief Executes the K-Means clustering algorithm.

@@ -1,3 +1,0 @@
-/Users/shlomibenshushan/Repositories/machine-learning-in-cpp/kmeans/build/CMakeFiles/kmeans.dir
-/Users/shlomibenshushan/Repositories/machine-learning-in-cpp/kmeans/build/CMakeFiles/edit_cache.dir
-/Users/shlomibenshushan/Repositories/machine-learning-in-cpp/kmeans/build/CMakeFiles/rebuild_cache.dir
