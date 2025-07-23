@@ -1,4 +1,4 @@
-#include "../include/data_point.hpp"
+#include "data_point.hpp"
 
 DataPoint::DataPoint()
     : feature_vector(new std::vector<uint8_t>),

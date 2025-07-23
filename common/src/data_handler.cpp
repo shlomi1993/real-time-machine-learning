@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <unordered_set>
-#include "../include/data_handler.hpp"
+#include "data_handler.hpp"
 
 // Constructor
 DataHandler::DataHandler() noexcept {
