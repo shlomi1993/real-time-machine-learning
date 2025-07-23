@@ -14,14 +14,14 @@ SRCS := $(SRC_DIR)/knn.cpp \
         $(COMMON_DIR)/src/data_set.cpp
 
 # Test source file
-TEST_SRC := knn_test.cpp
+TEST_SRC := test.cpp
 
 # Object files
 OBJS := $(SRCS:.cpp=.o)
 TEST_OBJ := $(TEST_SRC:.cpp=.o)
 
 # Target executable
-TARGET := $(BIN_DIR)/knn_test.out
+TARGET := $(BIN_DIR)/test.out
 
 # Default target
 all: $(TARGET)

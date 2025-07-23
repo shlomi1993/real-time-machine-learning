@@ -14,7 +14,7 @@ SRCS := $(SRC_DIR)/kmeans.cpp $(SRC_DIR)/cluster.cpp \
         $(COMMON_DIR)/src/data_set.cpp
 
 OBJS := $(SRCS:.cpp=.o)
-TARGET := $(BIN_DIR)/kmeans_test.out
+TARGET := $(BIN_DIR)/test.out
 
 # Default target
 all: $(TARGET)
@@ -24,11 +24,11 @@ $(BIN_DIR):
 	mkdir -p $(BIN_DIR)
 
 # Link object files into the final binary
-$(TARGET): $(OBJS) kmeans_test.o | $(BIN_DIR)
+$(TARGET): $(OBJS) test.o | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 # Compile the test file
-kmeans_test.o: kmeans_test.cpp
+test.o: test.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Compile all other source files
