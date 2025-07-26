@@ -137,32 +137,29 @@ void NeuralNetwork::bprop(DataPoint *data_point) {
 
 /**
  * @brief Updates weights based on delta values and learning rate.
- * @param data Training data point.
+ * @param data_point Training data point.
  */
 void NeuralNetwork::update_weights(DataPoint *data_point) {
-    // Start with input features for first layer
+    // Inputs to the first layer: normalized feature vector
     std::vector<double> inputs = *data_point->get_normalized_feature_vector();
 
     for (size_t i = 0; i < layers.size(); ++i) {
-        if (i != 0) {
-            // For layers beyond first, inputs are outputs from previous layer
-            inputs.clear();
-            Layer* prev_layer = layers.at(i - 1);
-            for (Neuron* neuron : prev_layer->neurons) {
-                inputs.push_back(neuron->output);
-            }
-        }
-
         Layer* layer = layers.at(i);
+
+        // Update each neuron's weights
         for (Neuron* neuron : layer->neurons) {
-            // Update weights including bias (last weight)
             for (size_t j = 0; j < inputs.size(); ++j) {
                 neuron->weights[j] += learning_rate * neuron->delta * inputs[j];
             }
-            neuron->weights.back() += learning_rate * neuron->delta;  // bias update
+            // Update bias weight (last weight)
+            neuron->weights.back() += learning_rate * neuron->delta;
         }
 
+        // Prepare inputs for the next layer: current layer's outputs
         inputs.clear();
+        for (Neuron* neuron : layer->neurons) {
+            inputs.push_back(neuron->output);
+        }
     }
 }
 
@@ -234,6 +231,7 @@ void NeuralNetwork::validate() {
     for (DataPoint* data_point : *validation_set) {
         ++count;
         int prediction = predict(data_point);
+        // std::printf("Predicted: %d, Expected: %d\n", prediction, data_point->get_label());  // Debug
         if (data_point->get_class_vector().at(prediction) == 1) {
             ++num_correct;
         }
