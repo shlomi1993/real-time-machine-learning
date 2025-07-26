@@ -83,6 +83,38 @@ Custom datasets can be integrated using `DataHandler::read_csv()` or `read_input
 
 Each model directory contains a dedicated `Makefile`.
 
+### Build and run Extract-Transform-Load (ETL)
+
+```bash
+cd common
+make
+./bin/test.out
+````
+
+#### ETL Output Example
+
+```console
+real-time-machine-learning % cd common 
+common % make
+mkdir -p obj
+g++ -std=c++17 -Wall -Wextra -Iinclude -c src/data_handler.cpp -o obj/data_handler.o
+g++ -std=c++17 -Wall -Wextra -Iinclude -c src/data_point.cpp -o obj/data_point.o
+g++ -std=c++17 -Wall -Wextra -Iinclude -c src/data_set.cpp -o obj/data_set.o
+mkdir -p bin
+g++ -std=c++17 -Wall -Wextra -Iinclude test.cpp obj/data_handler.o obj/data_point.o obj/data_set.o -o bin/test.out
+common % ./bin/test.out 
+Input File Header read completed.
+Successfully read and stored 60000 feature vectors.
+Label File Header read completed.
+Successfully read and stored labels.
+Training data size: 45000.
+Test data size: 12000.
+Validation data size: 3000.
+Successfully extracted 10 unique classes.
+
+All tests passed successfully!
+```
+
 ### Build and run KNN or KMeans
 
 ```bash
@@ -91,6 +123,78 @@ make
 ./bin/test.out
 ````
 
+### KNN Output Example
+
+```console
+real-time-machine-learning % cd models/knn 
+knn % make
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c src/knn.cpp -o src/knn.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c ../../common/src/data_handler.cpp -o ../../common/src/data_handler.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c ../../common/src/data_point.cpp -o ../../common/src/data_point.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c ../../common/src/data_set.cpp -o ../../common/src/data_set.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c test.cpp -o test.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -o bin/test.out src/knn.o ../../common/src/data_handler.o ../../common/src/data_point.o ../../common/src/data_set.o test.o
+knn % ./bin/test.out 
+Input File Header read completed.
+Successfully read and stored 60000 feature vectors.
+Label File Header read completed.
+Successfully read and stored labels.
+Successfully extracted 10 unique classes.
+Training data size: 45000.
+Test data size: 12000.
+Validation data size: 3000.
+Set k to 2.
+Current validation performance: 90.9091%
+Current validation performance: 90.9091%
+Current validation performance: 93.75%
+Current validation performance: 93.0233%
+Current validation performance: 92.5926%
+Current validation performance: 93.75%
+Current validation performance: 94.5946%
+Current validation performance: 94.1176%
+Current validation performance: 94.7368%
+Current validation performance: 95.2381%
+Current validation performance: 95.6522%
+Current validation performance: 96%
+...
+```
+
+#### KMeans Output Example
+
+```console
+real-time-machine-learning % cd models/kmeans 
+kmeans % make
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c src/kmeans.cpp -o src/kmeans.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c src/cluster.cpp -o src/cluster.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c ../../common/src/data_handler.cpp -o ../../common/src/data_handler.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c ../../common/src/data_point.cpp -o ../../common/src/data_point.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c ../../common/src/data_set.cpp -o ../../common/src/data_set.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -c test.cpp -o test.o
+mkdir -p bin
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -o bin/test.out src/kmeans.o src/cluster.o ../../common/src/data_handler.o ../../common/src/data_point.o ../../common/src/data_set.o test.o
+kmeans % ./bin/test.out 
+Input File Header read completed.
+Successfully read and stored 60000 feature vectors.
+Label File Header read completed.
+Successfully read and stored labels.
+Successfully extracted 10 unique classes.
+Training data size: 45000.
+Test data size: 12000.
+Validation data size: 3000.
+Current Performance @ K = 10: 57.4333
+Current Performance @ K = 11: 58.9
+Current Performance @ K = 12: 62.7333
+Current Performance @ K = 13: 59.3333
+Current Performance @ K = 14: 66
+Current Performance @ K = 15: 67.2667
+Current Performance @ K = 16: 64.1
+Current Performance @ K = 17: 65.2333
+Current Performance @ K = 18: 69.3333
+Current Performance @ K = 19: 59.8333
+Current Performance @ K = 20: 68.3333
+...
+```
+
 ### Build and run ANN
 
 ```bash
@@ -98,3 +202,45 @@ cd models/amm
 make <mnist/iris>
 ./bin/test.out
 ````
+
+#### ANN Output Example (MNIST)
+
+```console
+real-time-machine-learning % cd models/ann 
+ann % make
+You must specify a dataset: make mnist OR make iris
+ann % make mnist
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -DMNIST -c src/layer.cpp -o src/layer.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -DMNIST -c src/neural_network.cpp -o src/neural_network.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -DMNIST -c src/neuron.cpp -o src/neuron.o
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -DMNIST -c test.cpp -o test.o
+mkdir -p bin
+clang++ -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include -DMNIST -o bin/test.out src/layer.o src/neural_network.o src/neuron.o ../../common/src/data_handler.o ../../common/src/data_set.o ../../common/src/data_point.o test.o
+ann % ./bin/test.out 
+Input File Header read completed.
+Successfully read and stored 60000 feature vectors.
+Label File Header read completed.
+Successfully read and stored labels.
+Successfully extracted 10 unique classes.
+Training data size: 45000.
+Test data size: 12000.
+Validation data size: 3000.
+Epoch: 0         Error = 19419.8314
+Epoch: 1         Error = 7819.4686
+Epoch: 2         Error = 6442.0395
+Epoch: 3         Error = 5739.5664
+Epoch: 4         Error = 5358.1860
+Epoch: 5         Error = 5074.0687
+Epoch: 6         Error = 4896.4492
+Epoch: 7         Error = 4739.3658
+Epoch: 8         Error = 4611.1628
+Epoch: 9         Error = 4527.4296
+Epoch: 10        Error = 4419.5625
+Epoch: 11        Error = 4320.8683
+Epoch: 12        Error = 4299.7197
+Epoch: 13        Error = 4170.5805
+Epoch: 14        Error = 4123.5465
+Validation Performance: 0.9300
+Test Performance: 0.926833
+...
+```
