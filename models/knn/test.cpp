@@ -12,9 +12,9 @@ int main() {
 
     // Initialize KNN model
     KNN *knn = new KNN();
-    knn->set_training_data(dh->get_training_data());
-    knn->set_test_data(dh->get_test_data());
-    knn->set_validation_data(dh->get_validation_data());
+    knn->set_training_data(dh->get_training_set());
+    knn->set_test_data(dh->get_test_set());
+    knn->set_validation_data(dh->get_validation_set());
 
     // Find the best k value for KNN
     double performance = 0.0;

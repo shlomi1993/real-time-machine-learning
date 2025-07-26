@@ -1,6 +1,7 @@
 # Compiler and flags
 CXX := clang++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -Iinclude -I../../common/include
+# CXXFLAGS := -std=c++17 -Wall -Wextra -g -O0 -Iinclude -I../../common/include
 
 # Directories
 SRC_DIR := src

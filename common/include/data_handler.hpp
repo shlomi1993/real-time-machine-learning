@@ -96,17 +96,17 @@ public:
      * @brief Returns a pointer to the training data set.
      * @return Pointer to vector of DataPoint*.
      */
-    std::vector<DataPoint *> *get_training_data() const;
+    std::vector<DataPoint *> *get_training_set() const;
 
     /**
      * @brief Returns a pointer to the validation data set.
      * @return Pointer to vector of DataPoint*.
      */
-    std::vector<DataPoint *> *get_validation_data() const;
+    std::vector<DataPoint *> *get_validation_set() const;
 
     /**
      * @brief Returns a pointer to the test data set.
      * @return Pointer to vector of DataPoint*.
      */
-    std::vector<DataPoint *> *get_test_data() const;
+    std::vector<DataPoint *> *get_test_set() const;
 };

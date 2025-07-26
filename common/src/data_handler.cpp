@@ -208,14 +208,14 @@ int DataHandler::get_class_count() const {
     return num_classes;
 }
 
-std::vector<DataPoint *> *DataHandler::get_training_data() const {
+std::vector<DataPoint *> *DataHandler::get_training_set() const {
     return training_data;
 }
 
-std::vector<DataPoint *> *DataHandler::get_validation_data() const {
+std::vector<DataPoint *> *DataHandler::get_validation_set() const {
     return validation_data;
 }
 
-std::vector<DataPoint *> *DataHandler::get_test_data() const {
+std::vector<DataPoint *> *DataHandler::get_test_set() const {
     return test_data;
 }

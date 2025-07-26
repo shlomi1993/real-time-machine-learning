@@ -76,12 +76,12 @@ double NeuralNetwork::transfer_derivative(double output) {
 
 /**
  * @brief Forward propagation through all layers.
- * @param data Input data point.
+ * @param data_point Input data point.
  * @return Output vector from final layer.
  */
-std::vector<double> NeuralNetwork::fprop(DataPoint *data) {
+std::vector<double> NeuralNetwork::fprop(DataPoint *data_point) {
     // Start with input features
-    std::vector<double> inputs = *data->get_normalized_feature_vector();
+    std::vector<double> inputs = *data_point->get_normalized_feature_vector();
 
     // Propagate through each layer
     for (Layer* layer : layers) {
@@ -146,6 +146,7 @@ void NeuralNetwork::update_weights(DataPoint *data_point) {
     for (size_t i = 0; i < layers.size(); ++i) {
         if (i != 0) {
             // For layers beyond first, inputs are outputs from previous layer
+            inputs.clear();
             Layer* prev_layer = layers.at(i - 1);
             for (Neuron* neuron : prev_layer->neurons) {
                 inputs.push_back(neuron->output);
@@ -199,7 +200,7 @@ void NeuralNetwork::train(int num_epochs) {
             update_weights(data_point);
         }
 
-        std::printf("Epoch: %d \t Error=%.4f\n", epoch, sum_error);
+        std::printf("Epoch: %d \t Error = %.4f\n", epoch, sum_error);
     }
 }
 

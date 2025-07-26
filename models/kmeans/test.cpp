@@ -17,13 +17,13 @@ int main() {
     int best_k = 1;
 
     // Look for the best k
-    for (int k = dh->get_class_count(); k < static_cast<int>(dh->get_training_data()->size() * 0.1); ++k) {
+    for (int k = dh->get_class_count(); k < static_cast<int>(dh->get_training_set()->size() * 0.1); ++k) {
 
         // Instantiate KMeans with the current k
         auto *kmeans = new KMeans(k);
-        kmeans->set_training_data(dh->get_training_data());
-        kmeans->set_test_data(dh->get_test_data());
-        kmeans->set_validation_data(dh->get_validation_data());
+        kmeans->set_training_data(dh->get_training_set());
+        kmeans->set_test_data(dh->get_test_set());
+        kmeans->set_validation_data(dh->get_validation_set());
 
         // Initialize clusters and train the model
         kmeans->init_clusters();
@@ -46,9 +46,9 @@ int main() {
     // Retrain the a KMeans model with the best k
     std::cout << "Best K: " << best_k << " with performance: " << best_performance << std::endl;
     auto *final_kmeans = new KMeans(best_k);
-    final_kmeans->set_training_data(dh->get_training_data());
-    final_kmeans->set_test_data(dh->get_test_data());
-    final_kmeans->set_validation_data(dh->get_validation_data());
+    final_kmeans->set_training_data(dh->get_training_set());
+    final_kmeans->set_test_data(dh->get_test_set());
+    final_kmeans->set_validation_data(dh->get_validation_set());
 
     // Initialize clusters and train the final model
     final_kmeans->init_clusters();

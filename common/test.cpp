@@ -22,9 +22,9 @@ int main() {
 
     std::cout << std::endl;
     assert_equal(dh->get_class_count(), 10, "Class count should be 10");
-    assert_equal(dh->get_training_data()->size(), expected_train_size, "Training data size mismatch");
-    assert_equal(dh->get_validation_data()->size(), expected_val_size, "Validation data size mismatch");
-    assert_equal(dh->get_test_data()->size(), expected_test_size, "Test data size mismatch");
+    assert_equal(dh->get_training_set()->size(), expected_train_size, "Training data size mismatch");
+    assert_equal(dh->get_validation_set()->size(), expected_val_size, "Validation data size mismatch");
+    assert_equal(dh->get_test_set()->size(), expected_test_size, "Test data size mismatch");
     std::cout << "All tests passed successfully!" << std::endl;
 
     return 0;
