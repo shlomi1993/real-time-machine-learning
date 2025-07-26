@@ -38,7 +38,7 @@ int main() {
     }
 
     // Define network architecture and parameters
-    std::vector<int> hidden_layers = { 10, 10 };
+    std::vector<int> hidden_layers = {10, 10};
     auto input_size = static_cast<int>(vec_ptr->size());
     auto output_size = dh->get_class_count();
     double learning_rate = 0.1;
