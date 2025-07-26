@@ -30,7 +30,6 @@ double KNN::calculate_distance(DataPoint *query_point, DataPoint *input) {
 
     double distance = 0.0;
 
-#ifdef EUCLID
     // Compute Euclidean distance
     for (unsigned i = 0; i < query_point->get_feature_vector_size(); ++i) {
         double diff = query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i);
@@ -38,12 +37,10 @@ double KNN::calculate_distance(DataPoint *query_point, DataPoint *input) {
     }
     distance = std::sqrt(distance);
 
-#elif defined MANHATTAN
-    // Compute Manhattan distance
-    for (unsigned i = 0; i < query_point->get_feature_vector_size(); ++i) {
-        distance += std::abs(query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i));
-    }
-#endif
+    // // Alternatively, compute Manhattan distance
+    // for (unsigned i = 0; i < query_point->get_feature_vector_size(); ++i) {
+    //     distance += std::abs(query_point->get_feature_vector()->at(i) - input->get_feature_vector()->at(i));
+    // }
 
     return distance;
 }
@@ -128,7 +125,9 @@ double evaluate_performance(KNN &knn, std::vector<DataPoint *> *data_set, const 
         ++total;
         performance = (static_cast<double>(correct_count) * 100.0) / total;
 
-        std::cout << "Current " << set_name << " performance: " << performance << "%" << std::endl;
+        if (correct_count % 10 == 0) {
+            std::cout << "Current " << set_name << " performance: " << performance << "%" << std::endl;
+        }
     }
 
     performance = (static_cast<double>(correct_count) * 100.0) / data_set->size();
