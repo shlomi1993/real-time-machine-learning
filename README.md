@@ -244,5 +244,4 @@ Epoch: 13        Error = 4170.5805
 Epoch: 14        Error = 4123.5465
 Validation Performance: 0.9300
 Test Performance: 0.926833
-...
 ```
