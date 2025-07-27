@@ -1,6 +1,6 @@
 # Real-Time Machine Learning
 
-<img width="1531" height="651" alt="ChatGPT Image Jul 26, 2025, 10_43_03 PM" src="https://github.com/user-attachments/assets/3b86a252-ae86-483c-ab64-5d610c4393be" />
+<img width="3200" height="1200" alt="image" src="https://github.com/user-attachments/assets/1eb2b225-0a53-499e-84f6-c8d2bd3aec48" />
 
 A modular C++ implementation of classical machine learning algorithms designed for real-time inference and educational clarity. The project includes implementations of K-Nearest Neighbors (KNN), K-Means clustering, and feedforward Artificial Neural Networks (ANN), with support for the MNIST dataset, and partially for IRIS dataset.
 
