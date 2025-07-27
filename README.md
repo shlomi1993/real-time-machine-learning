@@ -1,6 +1,6 @@
 # Real-Time Machine Learning
 
-<img width="3200" height="1200" alt="image" src="https://github.com/user-attachments/assets/1eb2b225-0a53-499e-84f6-c8d2bd3aec48" />
+<img width="3200" height="1200" alt="image" src="https://github.com/user-attachments/assets/1e815045-c490-4774-9ebc-991862ccfc09" />
 
 A modular C++ implementation of classical machine learning algorithms designed for real-time inference and educational clarity. The project includes implementations of K-Nearest Neighbors (KNN), K-Means clustering, and feedforward Artificial Neural Networks (ANN), with support for the MNIST dataset, and partially for IRIS dataset.
 
